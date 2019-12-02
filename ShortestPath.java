@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import org.apache.commons.text.WordUtils;
+
 import com.ginchen.algo2.Graph.Edge;
 import com.ginchen.algo2.Graph.Map;
 
@@ -35,7 +37,7 @@ public class ShortestPath {
 		// prints the distance between each vertex in the graph and the source vertex
 		void printMatrix(Map map, int[] dist){
 			for (int i=0;i<V;i++) {
-				System.out.println(map.sources[i] + " " + dist[i]);
+				System.out.println(map.sources.get(i) + " " + dist[i]);
 			}
 		}
 		
@@ -66,7 +68,7 @@ public class ShortestPath {
 			int v = 0;
 			for (int i=0;i<V-1;i++) {
 				int u = extractMin(dist, inQ);
-				if (map.sources[u].equals(map.sources[d])) {
+				if (map.sources.get(u).equals(map.sources.get(d))) {
 					break;
 				}
 				inQ[u] = false;
@@ -81,11 +83,7 @@ public class ShortestPath {
 					 * parent vertex is reachable from source vertex (dist[u] != inf)
 					 * the new cost is smaller than the previous cost
 					 */
-					for (int z = 0; z<map.sources.length; z++) {
-						if (map.sources[z].equals(adj.get(y).destination)){
-							v = z;
-						}
-					}
+					v = map.sources.indexOf(adj.get(y).destination);
 					if(inQ[v] && adj.get(y).weight!=0 && dist[u]!=Integer.MAX_VALUE && dist[u]+adj.get(y).weight<dist[v]) {
 						dist[v] = dist[u]+adj.get(y).weight;
 						parent[v] = u;
@@ -102,7 +100,7 @@ public class ShortestPath {
 			}
 			path.addFirst(s);
 			for (int pathIndex : path) {
-				System.out.println(map.sources[pathIndex]);
+				System.out.print(map.sources.get(pathIndex) + "; ");
 			}
 			
 			return dist;
@@ -113,25 +111,44 @@ public class ShortestPath {
 		public static void main(String[] args) 
 	    { 
 	        /* Let us create the example graph discussed above */
-			int s = 0;
-			int dest = 0;
+			String source = null;
+			String destination = null;
 			Scanner input = new Scanner(System.in);
+			
 			Map map = new Map();
 	        map.createMap();
 	        ShortestPath t = new ShortestPath();
-	        System.out.println("Source: ");
-	        String source = input.nextLine();
-	        System.out.println("Destination: ");
-	        String destination = input.nextLine();
-	        for (int i = 0; i<map.sources.length; i++) {
-	        	if (map.sources[i].equals(source)) {
-	        		s = i;
-	        	}
-	        	if (map.sources[i].equals(destination)) {
-	        		dest = i;
-	        	}
+	        
+	        while (true) {
+	        	System.out.println("Source: (Please choose one of the following places: \n\"Indoor Track And Tennis\", \"Gym\", \"Schacht Center\", \"30\", \"Ford Hall\",\n" + 
+		        		"\"Menden Hall\", \"Sage Hall\", \"Hubbard\", \"Lawrence\", \"Morris\", \"Tyler\", \"Conference Center\",\n" + 
+		        		"\"McConnell\", \"Bass\", \"Burton\", \"Wright\", \"Lyman Conservatory\", \"Chapin\", \"Campus Center\",\n" + 
+		        		"\"Res 1\", \"John M. Greene\", \"Dewey\", \"Hatfield\", \"Clark\", \"Museum Of Art\", \"Seelye\", \"Lily\",\n" + 
+		        		"\"Pierce\", \"College Hall\", \"Res 2\", \"Alumnae House\")");
+		        source = WordUtils.capitalize(input.nextLine());
+		        if (!map.sources.contains(source)) {
+		        	System.out.println("Please start over and enter an existing source.\n");
+		        	continue;
+		        }
+		        
+		        System.out.println("Destination: (Please choose one of the following places: \n\"Indoor Track and Tennis\", \"Gym\", \"Schacht Center\", \"30\", \"Ford Hall\",\n" + 
+		        		"\"Menden Hall\", \"Sage Hall\", \"Hubbard\", \"Lawrence\", \"Morris\", \"Tyler\", \"Conference Center\",\n" + 
+		        		"\"McConnell\", \"Bass\", \"Burton\", \"Wright\", \"Lyman Conservatory\", \"Chapin\", \"Campus Center\",\n" + 
+		        		"\"Res 1\", \"John M. Greene\", \"Dewey\", \"Hatfield\", \"Clark\", \"Museum of Art\", \"Seelye\", \"Lily\",\n" + 
+		        		"\"Pierce\", \"College Hall\", \"Res 2\", \"Alumnae House\")");
+		        destination = WordUtils.capitalize(input.nextLine());
+		        if (!map.sources.contains(destination)) {
+		        	System.out.println("Please start over and enter an existing destination.\n");
+		        	continue;
+		        }
+		        break;
+		        
 	        }
-	        int[] dist = t.dijkstra(map, s, dest);
-	        System.out.println(dist[dest]);
+	        int src = map.sources.indexOf(source);
+	        int dest = map.sources.indexOf(destination);
+	        
+	        System.out.println("The path is: ");
+	        int[] dist = t.dijkstra(map, src, dest);
+	        System.out.println("\nDistance from source to destination = " + dist[dest]);
 	    } 
 }

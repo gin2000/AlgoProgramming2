@@ -1,7 +1,10 @@
 package com.ginchen.algo2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Graph {
     static class Edge {
@@ -25,17 +28,19 @@ public class Graph {
     	
     	LinkedList<Edge> [] AllEdge;
     	
-    	String[] sources = {"Indoor Track and Tennis", "Gym", "Schacht Center", "30", "Ford Hall",
+    	List<String> sources = (List<String>) Arrays.asList("Indoor Track and Tennis", "Gym", "Schacht Center", "30", "Ford Hall",
     			"Menden Hall", "Sage Hall", "Hubbard", "Lawrence", "Morris", "Tyler", "Conference Center",
     			"McConnell", "Bass", "Burton", "Wright", "Lyman Conservatory", "Chapin", "Campus Center",
     			"Res 1", "John M. Greene", "Dewey", "Hatfield", "Clark", "Museum of Art", "Seelye", "Lily",
-    			"Pierce", "College Hall", "Res 2", "Alumnae House"};
+    			"Pierce", "College Hall", "Res 2", "Alumnae House");
+
     	
     	public Map() {
-    		AllEdge = new LinkedList[sources.length];
-    		for (int i = 0; i < sources.length; i++) {
+    		AllEdge = new LinkedList[sources.size()];
+    		for (int i = 0; i < sources.size(); i++) {
     			AllEdge[i] = new LinkedList<Edge>();
     		}
+    		
     	}
     	
     	public void addEdge(String source, String destination, int weight) {
@@ -155,11 +160,6 @@ public class Graph {
     		}
     	}
     	
-    	public static void main(String[] args) {
-    		Map test = new Map();
-    		test.createMap();
-    		test.print();
-    	}
     }
 	
 }

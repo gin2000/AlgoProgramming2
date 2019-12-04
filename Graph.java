@@ -7,13 +7,33 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Graph {
+	/**
+	 * Edge class that creates object edge
+	 * @author jialinzhang
+	 *
+	 */
     static class Edge {
+    	/**
+    	 * weight of each edge
+    	 */
     	int weight;
     	
+    	/**
+    	 * source vertex
+    	 */
     	String source;
     	
+    	/**
+    	 * destination vertex
+    	 */
     	String destination;
     	
+    	/**
+    	 * create object edge
+    	 * @param source - source vertex
+    	 * @param destination - destination vertex
+    	 * @param weight - weight of the source and destination
+    	 */
     	public Edge(String source, String destination, int weight) {
     		this.source = source;
     		this.destination = destination;
@@ -22,19 +42,35 @@ public class Graph {
     	
     }
     
+    /**
+     * Create object map
+     * @author jialinzhang
+     *
+     */
     static class Map {
     	
+    	/**
+    	 * adjacency list of a vertex
+    	 */
     	LinkedList<Edge> Adj;
     	
+    	/**
+    	 * a linked list of adjacency lists
+    	 */
     	LinkedList<Edge> [] AllEdge;
     	
-    	List<String> sources = (List<String>) Arrays.asList("Indoor Track and Tennis", "Gym", "Schacht Center", "30", "Ford Hall",
+    	/**
+    	 * a list of all vertices
+    	 */
+    	List<String> sources = (List<String>) Arrays.asList("Indoor Track And Tennis", "Gym", "Schacht Center", "30", "Ford Hall",
     			"Menden Hall", "Sage Hall", "Hubbard", "Lawrence", "Morris", "Tyler", "Conference Center",
     			"McConnell", "Bass", "Burton", "Wright", "Lyman Conservatory", "Chapin", "Campus Center",
-    			"Res 1", "John M. Greene", "Dewey", "Hatfield", "Clark", "Museum of Art", "Seelye", "Lily",
+    			"Res 1", "John M. Greene", "Dewey", "Hatfield", "Clark", "Museum Of Art", "Seelye", "Lily",
     			"Pierce", "College Hall", "Res 2", "Alumnae House");
-
     	
+    	/**
+    	 * creates object map
+    	 */
     	public Map() {
     		AllEdge = new LinkedList[sources.size()];
     		for (int i = 0; i < sources.size(); i++) {
@@ -43,9 +79,16 @@ public class Graph {
     		
     	}
     	
+    	/**
+    	 * add edge to an adjacency list
+    	 * @param source - source vertex
+    	 * @param destination - destination vertex
+    	 * @param weight - weight between source and destination
+    	 */
     	public void addEdge(String source, String destination, int weight) {
     		Edge newEdge = new Edge(source, destination, weight);
     		int i = 0;
+    		// first determine whether the source has already been added in AllEdge
     		while(!AllEdge[i].isEmpty()) {
     			if (AllEdge[i].getFirst().source == source) {
     				AllEdge[i].add(newEdge);
@@ -53,19 +96,23 @@ public class Graph {
     			}
     			i++;
     		}
+    		// if not, create a new adj list starts with the new edge
     		AllEdge[i].addFirst(newEdge);
     	}
     	
+    	/**
+    	 * create a map based on the given graph
+    	 */
     	public void createMap() {
-    		addEdge("Indoor Track and Tennis", "Gym", 2);
-    		addEdge("Indoor Track and Tennis", "30", 4);
-    		addEdge("Gym", "Indoor Track and Tennis", 2);
+    		addEdge("Indoor Track And Tennis", "Gym", 2);
+    		addEdge("Indoor Track And Tennis", "30", 4);
+    		addEdge("Gym", "Indoor Track And Tennis", 2);
     		addEdge("Gym", "Schacht Center", 2);
     		addEdge("Gym", "Sage Hall", 4);
     		addEdge("Schacht Center", "Gym", 2);
     		addEdge("Schacht Center", "Menden Hall", 3);
     		addEdge("Schacht Center", "30", 2);
-    		addEdge("30", "Indoor Track and Tennis", 4);
+    		addEdge("30", "Indoor Track And Tennis", 4);
     		addEdge("30", "Schacht Center", 2);
     		addEdge("30", "Ford Hall", 4);
     		addEdge("Ford Hall", "30", 4);
@@ -122,34 +169,36 @@ public class Graph {
     		addEdge("Dewey", "John M. Greene", 2);
     		addEdge("Dewey", "Clark", 2);
     		addEdge("Dewey", "Hatfield", 1);
-    		addEdge("Dewey", "Museum of Art", 6);
+    		addEdge("Dewey", "Museum Of Art", 6);
     		addEdge("Hatfield", "Dewey", 1);
     		addEdge("Hatfield", "Seelye", 7);
     		addEdge("Clark", "Dewey", 2);
-    		addEdge("Clark", "Museum of Art", 5);
+    		addEdge("Clark", "Museum Of Art", 5);
     		addEdge("Clark", "Res 2", 3);
-    		addEdge("Museum of Art", "Dewey", 6);
-    		addEdge("Museum of Art", "Clark", 5);
-    		addEdge("Museum of Art", "Seelye", 4);
-    		addEdge("Museum of Art", "College Hall", 6);
-    		addEdge("Museum of Art", "Alumnae House", 3);
+    		addEdge("Museum Of Art", "Dewey", 6);
+    		addEdge("Museum Of Art", "Clark", 5);
+    		addEdge("Museum Of Art", "Seelye", 4);
+    		addEdge("Museum Of Art", "College Hall", 6);
+    		addEdge("Museum Of Art", "Alumnae House", 3);
     		addEdge("Seelye", "Hatfield", 7);
     		addEdge("Seelye", "Hubbard", 3);
     		addEdge("Seelye", "Lily", 3);
-    		addEdge("Seelye", "Museum of Art", 4);
+    		addEdge("Seelye", "Museum Of Art", 4);
     		addEdge("Lily","Pierce", 1);
     		addEdge("Lily","Seelye", 3);
 			addEdge("Pierce", "College Hall", 3);
 			addEdge("Pierce", "Lily", 1);
-			addEdge("College Hall", "Museum of Art", 6);
+			addEdge("College Hall", "Museum Of Art", 6);
 			addEdge("College Hall", "Pierce", 3);
 			addEdge("Res 2", "Clark", 3);
 			addEdge("Res 2", "Alumnae House", 5);
-			addEdge("Alumnae House", "Museum of Art", 3);
-			addEdge("Alumnae House", "Res 2", 5);
-    		
+			addEdge("Alumnae House", "Museum Of Art", 3);
+			addEdge("Alumnae House", "Res 2", 5);	
     	}
     	
+    	/**
+    	 * print all edges and corresponding weights
+    	 */
     	public void print() {
     		for (int i = 0; i<AllEdge.length; i++) {
     			LinkedList<Edge> list = AllEdge[i];

@@ -11,9 +11,8 @@ import com.ginchen.algo2.Graph.Map;
 
 public class ShortestPath {
 	// The number of vertices in the graph
-	
 	static final int V = 31;
-	
+	// adj list of a vertex
 	LinkedList<Edge> adj;
 		
 		// gives the index of the vertex of minimum distance from the source (vertex is inQ)
@@ -35,29 +34,32 @@ public class ShortestPath {
 		
 		
 		// prints the distance between each vertex in the graph and the source vertex
-		void printMatrix(Map map, int[] dist){
+		void printMatrix(Map map, int[] dist) {
 			for (int i=0;i<V;i++) {
 				System.out.println(map.sources.get(i) + " " + dist[i]);
 			}
 		}
 		
-		/*
-		 *  find shortest path between each vertex and the source vertex (s)
-		 *  using an list (w[][]) as a representation of the graph, where
-		 *  w[i][j] is the cost between adjacent vertex i and j
-		 *  w[i][j] = 0 if vertex i, j are not direct neighbors 
+		/**
+		 * find shortest path between each vertex and the source vertex (s)
+		 * if we have already reached the destination, stop the program
+		 * @param map - map representation of the graph
+		 * @param s - the source vertex index in the sources list
+		 * @param d - the destination vertex index in the source list
+		 * @return - a list of shortest distance
 		 */
 		int[] dijkstra(Map map, int s, int d) {
 			// dist is the output array; it contains the shortest path cost from the vertex to every other vertex
 			// initialize dist
 			int[] dist = new int[V];
 			
-			// inQ[i] is false if vertex i is included in the MST
+			// inQ[i] is false if vertex i is included in the path
 			Boolean inQ[] = new Boolean[V];
 			
+			// the parent index of vertices
 			int[] parent = new int[V];
 			
-			// initialize all dist to inf and all inQ to true
+			// initialize all dist to infinite and all inQ to true
 			for (int i=0;i<V;i++) {
 				dist[i] = Integer.MAX_VALUE;
 				inQ[i] = true;
@@ -68,10 +70,13 @@ public class ShortestPath {
 			int v = 0;
 			for (int i=0;i<V-1;i++) {
 				int u = extractMin(dist, inQ);
+				// if we've extracted the destination vertex
+				// break the for loop
 				if (map.sources.get(u).equals(map.sources.get(d))) {
 					break;
 				}
 				inQ[u] = false;
+				// adj list of vertex at index u in the sources list
 				adj = map.AllEdge[u];
 				
 				// for all vertices in adj[u]
@@ -79,8 +84,8 @@ public class ShortestPath {
 					// update dist[v] only:
 					/*
 					 * v inQ
-					 * w[u][v] != 0 
-					 * parent vertex is reachable from source vertex (dist[u] != inf)
+					 * weight between sources[u] and sources[v] != 0 
+					 * parent vertex is reachable from source vertex (dist[u] != infinity)
 					 * the new cost is smaller than the previous cost
 					 */
 					v = map.sources.indexOf(adj.get(y).destination);
@@ -91,7 +96,7 @@ public class ShortestPath {
 				}
 			}
 			
-			// print path from source to destination
+			// print path from source to destination using parent index
 			LinkedList<Integer> path = new LinkedList<>();
 			int p = d;
 			while(p != s) {
@@ -106,11 +111,8 @@ public class ShortestPath {
 			return dist;
 		}
 		
-		
-		// test
-		public static void main(String[] args) 
-	    { 
-	        /* Let us create the example graph discussed above */
+		public static void main(String[] args) { 
+	        
 			String source = null;
 			String destination = null;
 			Scanner input = new Scanner(System.in);
@@ -119,24 +121,29 @@ public class ShortestPath {
 	        map.createMap();
 	        ShortestPath t = new ShortestPath();
 	        
+	        /**
+	         * verify if the input is valid each time
+	         */
 	        while (true) {
 	        	System.out.println("Source: (Please choose one of the following places: \n\"Indoor Track And Tennis\", \"Gym\", \"Schacht Center\", \"30\", \"Ford Hall\",\n" + 
 		        		"\"Menden Hall\", \"Sage Hall\", \"Hubbard\", \"Lawrence\", \"Morris\", \"Tyler\", \"Conference Center\",\n" + 
 		        		"\"McConnell\", \"Bass\", \"Burton\", \"Wright\", \"Lyman Conservatory\", \"Chapin\", \"Campus Center\",\n" + 
 		        		"\"Res 1\", \"John M. Greene\", \"Dewey\", \"Hatfield\", \"Clark\", \"Museum Of Art\", \"Seelye\", \"Lily\",\n" + 
 		        		"\"Pierce\", \"College Hall\", \"Res 2\", \"Alumnae House\")");
-		        source = WordUtils.capitalize(input.nextLine());
+		        // the program shouldn't be case sensitive
+	        	source = WordUtils.capitalize(input.nextLine());
 		        if (!map.sources.contains(source)) {
 		        	System.out.println("Please start over and enter an existing source.\n");
 		        	continue;
 		        }
 		        
-		        System.out.println("Destination: (Please choose one of the following places: \n\"Indoor Track and Tennis\", \"Gym\", \"Schacht Center\", \"30\", \"Ford Hall\",\n" + 
+		        System.out.println("Destination: (Please choose one of the following places: \n\"Indoor Track And Tennis\", \"Gym\", \"Schacht Center\", \"30\", \"Ford Hall\",\n" + 
 		        		"\"Menden Hall\", \"Sage Hall\", \"Hubbard\", \"Lawrence\", \"Morris\", \"Tyler\", \"Conference Center\",\n" + 
 		        		"\"McConnell\", \"Bass\", \"Burton\", \"Wright\", \"Lyman Conservatory\", \"Chapin\", \"Campus Center\",\n" + 
-		        		"\"Res 1\", \"John M. Greene\", \"Dewey\", \"Hatfield\", \"Clark\", \"Museum of Art\", \"Seelye\", \"Lily\",\n" + 
+		        		"\"Res 1\", \"John M. Greene\", \"Dewey\", \"Hatfield\", \"Clark\", \"Museum Of Art\", \"Seelye\", \"Lily\",\n" + 
 		        		"\"Pierce\", \"College Hall\", \"Res 2\", \"Alumnae House\")");
 		        destination = WordUtils.capitalize(input.nextLine());
+		        
 		        if (!map.sources.contains(destination)) {
 		        	System.out.println("Please start over and enter an existing destination.\n");
 		        	continue;
